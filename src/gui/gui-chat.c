@@ -676,7 +676,9 @@ gui_chat_printf_date_tags (struct t_gui_buffer *buffer, time_t date,
     if ((gui_chat_mute == GUI_CHAT_MUTE_ALL_BUFFERS)
         || ((gui_chat_mute == GUI_CHAT_MUTE_BUFFER)
             && (gui_chat_mute_buffer == buffer)))
-        return;
+        /* if localvar nomute is set to 1 on a buffer do NOT mute */
+        if (string_strcasecmp (gui_buffer_get_string( buffer, "localvar_nomute" ), "1") != 0)
+            return;
 
     weechat_va_format (message);
     if (!vbuffer)
