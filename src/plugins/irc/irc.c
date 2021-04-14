@@ -107,6 +107,9 @@ irc_signal_upgrade_cb (const void *pointer, void *data,
     (void) signal;
     (void) type_data;
 
+    irc_upgrade_save ();
+    return WEECHAT_RC_OK;
+
     irc_signal_upgrade_received = 1;
 
     quit = (signal_data && (strcmp (signal_data, "quit") == 0));

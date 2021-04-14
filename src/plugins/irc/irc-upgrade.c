@@ -400,7 +400,7 @@ irc_upgrade_read_cb (const void *pointer, void *data,
                     str = weechat_infolist_string (infolist, "current_ip");
                     if (str)
                         irc_upgrade_current_server->current_ip = strdup (str);
-                    sock = weechat_infolist_integer (infolist, "sock");
+                    sock = -1;
                     if (sock >= 0)
                     {
                         irc_upgrade_current_server->sock = sock;
@@ -410,10 +410,20 @@ irc_upgrade_read_cb (const void *pointer, void *data,
                             &irc_server_recv_cb,
                             irc_upgrade_current_server,
                             NULL);
+		    }
+                    if (weechat_infolist_integer (infolist, "disconnected") == 0)
+                    {
+                        irc_upgrade_current_server->reconnect_start = 1;
+                        irc_upgrade_current_server->is_connected = 0;
+                        irc_upgrade_current_server->ssl_connected = 0;
+                        irc_upgrade_current_server->disconnected = 1;
                     }
-                    irc_upgrade_current_server->is_connected = weechat_infolist_integer (infolist, "is_connected");
-                    irc_upgrade_current_server->ssl_connected = weechat_infolist_integer (infolist, "ssl_connected");
-                    irc_upgrade_current_server->disconnected = weechat_infolist_integer (infolist, "disconnected");
+                    else
+                    {
+                        irc_upgrade_current_server->is_connected = weechat_infolist_integer (infolist, "is_connected");
+                        irc_upgrade_current_server->ssl_connected = weechat_infolist_integer (infolist, "ssl_connected");
+                        irc_upgrade_current_server->disconnected = weechat_infolist_integer (infolist, "disconnected");
+                    }
                     str = weechat_infolist_string (infolist, "unterminated_message");
                     if (str)
                         irc_upgrade_current_server->unterminated_message = strdup (str);
@@ -565,7 +575,7 @@ irc_upgrade_read_cb (const void *pointer, void *data,
                         }
                     }
                     irc_upgrade_current_server->reconnect_delay = weechat_infolist_integer (infolist, "reconnect_delay");
-                    irc_upgrade_current_server->reconnect_start = weechat_infolist_time (infolist, "reconnect_start");
+                    //irc_upgrade_current_server->reconnect_start = weechat_infolist_time (infolist, "reconnect_start");
                     irc_upgrade_current_server->command_time = weechat_infolist_time (infolist, "command_time");
                     irc_upgrade_current_server->reconnect_join = weechat_infolist_integer (infolist, "reconnect_join");
                     irc_upgrade_current_server->disable_autojoin = weechat_infolist_integer (infolist, "disable_autojoin");

@@ -6456,6 +6456,11 @@ COMMAND_CALLBACK(upgrade)
         return WEECHAT_RC_OK;
     }
 
+    if (quit)
+    {
+        return WEECHAT_RC_OK;
+    }
+
     weechat_quit = 1;
     weechat_upgrading = 1;
 
